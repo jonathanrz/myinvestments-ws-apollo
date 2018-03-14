@@ -1,3 +1,8 @@
+import * as jwt from "jwt-simple";
+import { User } from "../../entity/user";
+
+const JWT_SECRET = process.env.JWT_SECRET || "CHANGE_ME!!!";
+
 export const typeDefs = `
   type User {
     id: Int

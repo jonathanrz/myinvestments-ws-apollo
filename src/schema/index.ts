@@ -1,3 +1,4 @@
+/* tslint:disable:no-var-requires */
 import { GraphQLSchema } from "graphql";
 import { makeExecutableSchema } from "graphql-tools";
 
