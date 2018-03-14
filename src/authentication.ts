@@ -1,8 +1,8 @@
-import * as passport from "passport";
-import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
-import { User } from "./entity/User";
+import * as passport from "passport"
+import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt"
+import { User } from "./entity/User"
 
-const extractJWT = ExtractJwt.fromAuthHeaderAsBearerToken();
+const extractJWT = ExtractJwt.fromAuthHeaderAsBearerToken()
 
 passport.use(
   new JWTStrategy(
@@ -12,38 +12,39 @@ passport.use(
     },
     async (payload, done) => {
       if (payload && payload.id) {
-        const user = await User.findOneById(payload.id);
+        console.log("payload", payload)
+        const user = await User.findOneById(payload.id)
         if (user) {
-          return done(null, user);
+          return done(null, user)
         }
       }
 
-      return done(null, {});
+      return done(null, {})
     }
   )
-);
+)
 
 passport.serializeUser(async ({ id }, done) => {
   try {
-    const { password, ...user } = await User.findOneById(id);
-    return done(null, user);
+    const { password, ...user } = await User.findOneById(id)
+    return done(null, user)
   } catch (err) {
-    return done(err);
+    return done(err)
   }
-});
+})
 
 export const authentication = app => {
-  const authenticate = passport.authenticate("jwt");
+  const authenticate = passport.authenticate("jwt")
 
-  app.use(passport.initialize());
+  app.use(passport.initialize())
 
   app.use((req, res, next) => {
-    extractJWT(req) ? authenticate(req, res, next) : next();
-  });
-};
+    extractJWT(req) ? authenticate(req, res, next) : next()
+  })
+}
 
 export const ensureAuth = user => () => {
   if (!user) {
-    throw new Error("Unauthorized");
+    throw new Error("Unauthorized")
   }
-};
+}
