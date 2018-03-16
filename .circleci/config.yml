@@ -1,9 +1,9 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/circleci
+    working_directory: ~/repo
     docker:
-      - image: circleci/node:4.8.2
+      - image: circleci/node:7.10
     steps:
       - checkout
       - run:
@@ -12,15 +12,15 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: Install npm
-          command: npm install
+          name: Install
+          command: yarn install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
   test:
     docker:
-      - image: circleci/node:4.8.2
+      - image: circleci/node:7.10
       - image: circleci/postgres:9.6-alpine
           environment:
             POSTGRES_DB: myinvestments-test
