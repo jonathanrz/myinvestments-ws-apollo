@@ -1,23 +1,34 @@
 version: 2
 jobs:
-  build:
+  lint:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:8.9.3
     steps:
       - checkout
+      - run:
+          name: update yarn
+          command: sudo npm install yarn@1.3.2 --global
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: v2-dependencies-node_modules-{{ arch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install
           command: yarn install
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: v2-dependencies-node_modules-{{ arch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+      - run:
+          name: run linters
+          command: yarn lint
   test:
+    working_directory: ~/repo
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:8.9.3
+        environment:
+          POSTGRES_DB: myinvestments-test
+          POSTGRES_USER: "user"
+          POSTGRES_PASSWORD: "password"
       - image: circleci/postgres:9.6-alpine
         environment:
           POSTGRES_DB: myinvestments-test
@@ -26,26 +37,24 @@ jobs:
     steps:
       - checkout
       - run:
+          name: update yarn
+          command: sudo npm install yarn@1.3.2 --global
+      - restore_cache:
+          key: v2-dependencies-node_modules-{{ arch }}-{{ checksum "yarn.lock" }}
+      - run:
           name: Install
           command: yarn install
+      - save_cache:
+          key: v2-dependencies-node_modules-{{ arch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
       - run:
-          name: Test
-          command: npm test
-      - run:
-          name: Generate code coverage
-          command: './node_modules/.bin/nyc report --reporter=text-lcov'
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
+          name: test
+          command: yarn test --maxWorkers 2
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test
+      - lint
