@@ -30,7 +30,7 @@ jobs:
           command: echo '/usr/lib/postgresql/9.6/bin/:$PATH' >> $BASH_ENV
       - run:
           name: Create database
-          command: sudo psql -p 5433 -c 'create database myinvestments-test'
+          command: psql -h localhost -p 5432 -c 'create database myinvestments-test'
       - run:
           name: Test
           command: npm test
