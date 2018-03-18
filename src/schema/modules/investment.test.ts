@@ -47,6 +47,23 @@ const createInvestment = async (values, context) => {
   return result.createInvestment
 }
 
+const allInvestmentsQuery = () => `
+  {
+    investments {
+      uuid
+      name
+    }
+  }
+`
+const getInvestmentQuery = uuid => `
+  {
+    investment(uuid: "${uuid}") {
+      uuid
+      name
+    }
+  }
+`
+
 describe("investment model ", () => {
   let context
 
@@ -69,14 +86,7 @@ describe("investment model ", () => {
     const investment = await createInvestment({}, context)
 
     const result = await execute(
-      `
-        {
-          investment(uuid: "${investment.uuid}") {
-            uuid
-            name
-          }
-        }
-      `,
+      getInvestmentQuery(investment.uuid),
       null,
       context
     )
@@ -91,14 +101,7 @@ describe("investment model ", () => {
     context = { user }
 
     const result = await execute(
-      `
-        {
-          investment(uuid: "${investment.uuid}") {
-            uuid
-            name
-          }
-        }
-      `,
+      getInvestmentQuery(investment.uuid),
       null,
       context
     )
@@ -109,18 +112,7 @@ describe("investment model ", () => {
   it("should return user investments", async () => {
     const investment = await createInvestment({}, context)
 
-    const result = await execute(
-      `
-        {
-          investments {
-            uuid
-            name
-          }
-        }
-      `,
-      null,
-      context
-    )
+    const result = await execute(allInvestmentsQuery(), null, context)
 
     const { investments } = result
     expect(investments.length).toBe(1)
@@ -133,18 +125,7 @@ describe("investment model ", () => {
     const user = await createUser({ email: "another-user@email.com" })
     context = { user }
 
-    const result = await execute(
-      `
-        {
-          investments {
-            uuid
-            name
-          }
-        }
-      `,
-      null,
-      context
-    )
+    const result = await execute(allInvestmentsQuery(), null, context)
 
     const { investments } = result
     expect(investments.length).toBe(0)
