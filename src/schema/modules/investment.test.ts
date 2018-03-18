@@ -5,8 +5,9 @@ declare var execute: any
 
 bootApp(global)
 
-const createUser = async () => {
-  const data = { email: "example@email.com", password: "password" }
+const createUser = async values => {
+  const defaultValues = { email: "example@email.com", password: "password" }
+  const data = { ...defaultValues, ...values }
   const result = await execute(
     `
       mutation CreateUser($data: UserInput!){
@@ -50,11 +51,11 @@ describe("investment model ", () => {
   let context
 
   beforeEach(async () => {
-    const user = await createUser()
+    const user = await createUser({})
     context = { user }
   })
 
-  it("creates a investment succesfully", async () => {
+  it("should create a investment succesfully", async () => {
     const investment = await createInvestment(
       { name: "Create investment test" },
       context
@@ -64,7 +65,7 @@ describe("investment model ", () => {
     expect(investment.name).toBe("Create investment test")
   })
 
-  it("gets an investment by uuid", async () => {
+  it("should get an investment by uuid", async () => {
     const investment = await createInvestment({}, context)
 
     const result = await execute(
@@ -83,7 +84,29 @@ describe("investment model ", () => {
     expect(result.investment).toEqual(investment)
   })
 
-  it("return user investments", async () => {
+  it("should not return another user investment", async () => {
+    const investment = await createInvestment({}, context)
+
+    const user = await createUser({ email: "another-user@email.com" })
+    context = { user }
+
+    const result = await execute(
+      `
+        {
+          investment(uuid: "${investment.uuid}") {
+            uuid
+            name
+          }
+        }
+      `,
+      null,
+      context
+    )
+
+    expect(result.investment).toEqual(null)
+  })
+
+  it("should return user investments", async () => {
     const investment = await createInvestment({}, context)
 
     const result = await execute(
@@ -102,5 +125,28 @@ describe("investment model ", () => {
     const { investments } = result
     expect(investments.length).toBe(1)
     expect(investments[0]).toEqual(investment)
+  })
+
+  it("should not return another user investments", async () => {
+    const investment = await createInvestment({}, context)
+
+    const user = await createUser({ email: "another-user@email.com" })
+    context = { user }
+
+    const result = await execute(
+      `
+        {
+          investments {
+            uuid
+            name
+          }
+        }
+      `,
+      null,
+      context
+    )
+
+    const { investments } = result
+    expect(investments.length).toBe(0)
   })
 })
