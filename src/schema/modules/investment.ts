@@ -33,11 +33,11 @@ export const resolvers = {
   Query: {
     investments: (_, __, { user, ensureAuth }) => {
       ensureAuth()
-      return Investment.find({ where: { user } })
+      return Investment.find({ where: { user: user.id } })
     },
     investment: (_, { uuid }, { user, ensureAuth }) => {
       ensureAuth()
-      return Investment.findOne({ uuid, user })
+      return Investment.findOne({ uuid, user: user.id })
     }
   },
   Mutation: {

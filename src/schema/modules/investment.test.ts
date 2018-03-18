@@ -46,7 +46,7 @@ const createInvestment = async (values, context) => {
   return result.createInvestment
 }
 
-describe("create investment mutation ", () => {
+describe("investment model ", () => {
   let context
 
   beforeEach(async () => {
@@ -56,13 +56,30 @@ describe("create investment mutation ", () => {
 
   it("creates a investment succesfully", async () => {
     const investment = await createInvestment(
-      {
-        name: "Create investment test"
-      },
+      { name: "Create investment test" },
       context
     )
 
     expect(investment.uuid).not.toBeUndefined()
     expect(investment.name).toBe("Create investment test")
+  })
+
+  it("gets an investment by uuid", async () => {
+    const investment = await createInvestment({}, context)
+
+    const result = await execute(
+      `
+        {
+          investment(uuid: "${investment.uuid}") {
+            uuid
+            name
+          }
+        }
+      `,
+      null,
+      context
+    )
+
+    expect(result.investment).toEqual(investment)
   })
 })
