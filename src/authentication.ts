@@ -12,7 +12,6 @@ passport.use(
     },
     async (payload, done) => {
       if (payload && payload.id) {
-        console.log("payload", payload)
         const user = await User.findOneById(payload.id)
         if (user) {
           return done(null, user)
