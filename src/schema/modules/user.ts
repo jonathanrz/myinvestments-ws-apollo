@@ -10,21 +10,21 @@ export const typeDefs = `
     email: String!
   }
 
-  type Query {
-    me: User
-    user(id: Int!): User
-    users: [User]
-  }
-
-  type Mutation {
-    ${isTestEnv ? "createUser(data: UserInput!): User" : ""}
-    login(email: String!, password: String!): String
-  }
-
   input UserInput {
     email: String!
     password: String!
   }
+`
+
+export const query = `
+  me: User
+  user(id: Int!): User
+  users: [User]
+`
+
+export const mutation = `
+  ${isTestEnv ? "createUser(data: UserInput!): User" : ""}
+  login(email: String!, password: String!): String
 `
 
 const mutations: any = {
