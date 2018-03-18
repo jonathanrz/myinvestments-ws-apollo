@@ -82,4 +82,25 @@ describe("investment model ", () => {
 
     expect(result.investment).toEqual(investment)
   })
+
+  it("return user investments", async () => {
+    const investment = await createInvestment({}, context)
+
+    const result = await execute(
+      `
+        {
+          investments {
+            uuid
+            name
+          }
+        }
+      `,
+      null,
+      context
+    )
+
+    const { investments } = result
+    expect(investments.length).toBe(1)
+    expect(investments[0]).toEqual(investment)
+  })
 })
