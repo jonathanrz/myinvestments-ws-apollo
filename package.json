@@ -7,7 +7,6 @@
   "author": "Jonathan Zanella",
   "license": "MIT",
   "scripts": {
-    "heroku-postbuild": "typeorm migrations:run",
     "test": "jest",
     "start": "ts-node src/index.ts",
     "dev": "nodemon --exec ts-node src/index.ts",
@@ -38,16 +37,11 @@
     "typescript": "2.5.2"
   },
   "jest": {
-    "setupFiles": [
-      "./testSetup.ts"
-    ],
+    "setupFiles": ["./testSetup.ts"],
     "transform": {
       "^.+\\.ts?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "moduleFileExtensions": ["ts", "js"]
   }
 }
