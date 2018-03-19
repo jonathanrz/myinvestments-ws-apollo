@@ -1,4 +1,5 @@
 import { Investment } from "../../entity/Investment"
+import { withAuth } from "../../authentication"
 
 export const typeDefs = `
   type Investment {
@@ -31,24 +32,20 @@ export const mutation = `
 
 export const resolvers = {
   Query: {
-    investments: (_, __, { user, ensureAuth }) => {
-      ensureAuth()
-      return Investment.find({ where: { user: user.id } })
-    },
-    investment: (_, { uuid }, { user, ensureAuth }) => {
-      ensureAuth()
-      return Investment.findOne({ uuid, user: user.id })
-    }
+    investments: withAuth((_, __, { user }) =>
+      Investment.find({ where: { user: user.id } })
+    ),
+    investment: withAuth((_, { uuid }, { user }) =>
+      Investment.findOne({ uuid, user: user.id })
+    )
   },
   Mutation: {
-    createInvestment: (_, { data }, { user, ensureAuth }) => {
-      ensureAuth()
-      return Investment.create({ ...data, user: { ...user } }).save()
-    },
-    updateInvestment: (_, { uuid, data }, { user, ensureAuth }) => {
-      ensureAuth()
+    createInvestment: withAuth((_, { data }, { user }) =>
+      Investment.create({ ...data, user: { ...user } }).save()
+    ),
+    updateInvestment: withAuth((_, { uuid, data }, { user }) => {
       Investment.update({ uuid, user: user.id }, { ...data })
       return Investment.findOne({ uuid, user: user.id })
-    }
+    })
   }
 }

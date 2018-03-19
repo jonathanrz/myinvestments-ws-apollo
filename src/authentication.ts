@@ -47,3 +47,10 @@ export const ensureAuth = user => () => {
     throw new Error("Unauthorized")
   }
 }
+
+export const withAuth = func => {
+  return (obj, args, context, info) => {
+    context.ensureAuth()
+    return func(obj, args, context, info)
+  }
+}
