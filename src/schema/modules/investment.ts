@@ -47,7 +47,8 @@ export const resolvers = {
     },
     updateInvestment: (_, { uuid, data }, { user, ensureAuth }) => {
       ensureAuth()
-      return Investment.update({ uuid, user }, { ...data })
+      Investment.update({ uuid, user: user.id }, { ...data })
+      return Investment.findOne({ uuid, user: user.id })
     }
   }
 }

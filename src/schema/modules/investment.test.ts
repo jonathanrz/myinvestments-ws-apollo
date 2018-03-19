@@ -47,6 +47,30 @@ const createInvestment = async (values, context) => {
   return result.createInvestment
 }
 
+const updateInvestment = async (uuid, values, context) => {
+  const defaultValues = {
+    name: "Investment",
+    type: "Investment-type",
+    holder: "Investment-holder",
+    objective: "Investment-objective"
+  }
+  const data = { ...defaultValues, ...values }
+  const result = await execute(
+    `
+      mutation UpdateInvestment($uuid: String!, $data: InvestmentInput!){
+        updateInvestment(uuid: $uuid, data: $data) {
+          uuid
+          name
+        }
+      }
+    `,
+    { uuid, data },
+    context
+  )
+
+  return result.updateInvestment
+}
+
 const allInvestmentsQuery = () => `
   {
     investments {
@@ -72,7 +96,7 @@ describe("investment model ", () => {
     context = { user }
   })
 
-  it("should create a investment succesfully", async () => {
+  it("should create an investment succesfully", async () => {
     const investment = await createInvestment(
       { name: "Create investment test" },
       context
@@ -129,5 +153,21 @@ describe("investment model ", () => {
 
     const { investments } = result
     expect(investments.length).toBe(0)
+  })
+
+  it("should update an investment succesfully", async () => {
+    const investmentOriginal = await createInvestment(
+      { name: "Investment original" },
+      context
+    )
+
+    const investmentUpdated = await updateInvestment(
+      investmentOriginal.uuid,
+      { name: "Investment updated" },
+      context
+    )
+
+    expect(investmentUpdated.uuid).toBe(investmentOriginal.uuid)
+    expect(investmentUpdated.name).toBe("Investment updated")
   })
 })
