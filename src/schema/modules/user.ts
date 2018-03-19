@@ -1,5 +1,6 @@
 import * as jwt from "jwt-simple"
 import { User } from "../../entity/User"
+import { withAuth } from "../../authentication"
 
 const JWT_SECRET = process.env.JWT_SECRET || "CHANGE_ME!!!"
 const isTestEnv = process.env.NODE_ENV === "test"
@@ -10,21 +11,21 @@ export const typeDefs = `
     email: String!
   }
 
-  type Query {
-    me: User
-    user(id: Int!): User
-    users: [User]
-  }
-
-  type Mutation {
-    ${isTestEnv ? "createUser(data: UserInput!): User" : ""}
-    login(email: String!, password: String!): String
-  }
-
   input UserInput {
     email: String!
     password: String!
   }
+`
+
+export const query = `
+  me: User
+  user(id: Int!): User
+  users: [User]
+`
+
+export const mutation = `
+  ${isTestEnv ? "createUser(data: UserInput!): User" : ""}
+  login(email: String!, password: String!): String
 `
 
 const mutations: any = {
@@ -47,10 +48,7 @@ export const resolvers = {
   Query: {
     user: (_, { id }) => User.findOneById(id),
     users: () => User.find(),
-    me: (_, __, { user, ensureAuth }) => {
-      ensureAuth()
-      return user
-    }
+    me: withAuth((_, __, { user }) => user)
   },
   Mutation: mutations
 }

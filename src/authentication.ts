@@ -12,7 +12,6 @@ passport.use(
     },
     async (payload, done) => {
       if (payload && payload.id) {
-        console.log("payload", payload)
         const user = await User.findOneById(payload.id)
         if (user) {
           return done(null, user)
@@ -46,5 +45,12 @@ export const authentication = app => {
 export const ensureAuth = user => () => {
   if (!user) {
     throw new Error("Unauthorized")
+  }
+}
+
+export const withAuth = func => {
+  return (obj, args, context, info) => {
+    context.ensureAuth()
+    return func(obj, args, context, info)
   }
 }
