@@ -30,7 +30,7 @@ jobs:
           POSTGRES_DB: myinvestments
           POSTGRES_USER: "user"
           POSTGRES_PASSWORD: "password"
-      - image: circleci/postgres:9.6-alpine
+      - image: circleci/postgres:9.6-alpine-ram
         environment:
           POSTGRES_DB: myinvestments-test
           POSTGRES_USER: "user"
