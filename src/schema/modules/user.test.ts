@@ -126,15 +126,15 @@ describe("me query", () => {
     expect(loggedUser.me).toEqual(user)
   })
 
-  it("throws an error if the token is missing or is invalid", () =>
-    expect(
-      execute(`
+  it("throws an error if the token is missing or is invalid", async () => {
+    const loggedUser = await execute(`
       {
         me {
           id
           email
         }
       }
-    `).catch(catchErrorMessage)
-    ).rejects.toBe("Unauthorized"))
+    `)
+    expect(loggedUser.me).toEqual(null)
+  })
 })

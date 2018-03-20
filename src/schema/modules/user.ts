@@ -48,7 +48,7 @@ export const resolvers = {
   Query: {
     user: (_, { id }) => User.findOneById(id),
     users: () => User.find(),
-    me: withAuth((_, __, { user }) => user)
+    me: (_, __, { user }) => user
   },
   Mutation: mutations
 }
