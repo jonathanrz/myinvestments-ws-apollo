@@ -2,7 +2,11 @@
 import { GraphQLSchema } from "graphql"
 import { makeExecutableSchema } from "graphql-tools"
 
-const modules = [require("./modules/user"), require("./modules/investment")]
+const modules = [
+  require("./modules/user"),
+  require("./modules/investment"),
+  require("./modules/income")
+]
 
 const resolvers: any = modules.map(m => m.resolvers).filter(res => !!res)
 
