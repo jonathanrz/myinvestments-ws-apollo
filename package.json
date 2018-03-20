@@ -16,6 +16,7 @@
     "@types/jest": "^22.2.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
     "graphql-yoga": "^1.5.1",
     "jest": "^22.4.2",
     "jwt-simple": "^0.5.1",
@@ -37,11 +38,16 @@
     "typescript": "2.5.2"
   },
   "jest": {
-    "setupFiles": ["./testSetup.ts"],
+    "setupFiles": [
+      "./testSetup.ts"
+    ],
     "transform": {
       "^.+\\.ts?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   }
 }

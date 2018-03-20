@@ -1,6 +1,7 @@
 import "reflect-metadata"
 import * as express from "express"
 import * as bodyParser from "body-parser"
+import * as cors from "cors"
 import { get } from "lodash"
 import { GraphQLServer } from "graphql-yoga"
 import { createConnection } from "typeorm"
@@ -24,6 +25,7 @@ createConnection().then(() => {
 
   server.express.use(bodyParser.urlencoded({ extended: false }))
   server.express.use(bodyParser.json())
+  server.express.use(cors)
 
   authentication(server.express)
 
