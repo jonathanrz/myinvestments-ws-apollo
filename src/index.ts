@@ -25,7 +25,7 @@ createConnection().then(() => {
 
   server.express.use(bodyParser.urlencoded({ extended: false }))
   server.express.use(bodyParser.json())
-  server.express.use(cors)
+  server.express.use(cors())
 
   authentication(server.express)
 

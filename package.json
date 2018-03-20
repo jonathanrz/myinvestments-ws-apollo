@@ -13,6 +13,7 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "dependencies": {
+    "@types/cors": "^2.8.3",
     "@types/jest": "^22.2.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
