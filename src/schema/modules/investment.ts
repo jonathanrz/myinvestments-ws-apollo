@@ -9,6 +9,7 @@ export const typeDefs = `
     holder: String!
     objective: String!
     dueDate: Int
+    incomes: [Income]
   }
 
   input InvestmentInput {

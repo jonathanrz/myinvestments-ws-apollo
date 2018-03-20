@@ -1,4 +1,9 @@
-import { createUser, createInvestment, updateInvestment } from "./testBuilders"
+import {
+  createUser,
+  createInvestment,
+  updateInvestment,
+  createIncome
+} from "./testBuilders"
 
 const catchErrorMessage = err => Promise.reject(err.message)
 
@@ -20,6 +25,19 @@ const getInvestmentQuery = uuid => `
     investment(uuid: "${uuid}") {
       uuid
       name
+    }
+  }
+`
+
+const getInvestmentWithIncomesQuery = uuid => `
+  {
+    investment(uuid: "${uuid}") {
+      uuid
+      name
+      incomes {
+        uuid
+        date
+      }
     }
   }
 `
@@ -105,5 +123,22 @@ describe("investment model ", () => {
 
     expect(investmentUpdated.uuid).toBe(investmentOriginal.uuid)
     expect(investmentUpdated.name).toBe("Investment updated")
+  })
+
+  it("should return investment with incomes", async () => {
+    const investment = await createInvestment({}, context)
+    const income = await createIncome(investment.uuid, {}, context)
+
+    const result = await execute(
+      getInvestmentWithIncomesQuery(investment.uuid),
+      null,
+      context
+    )
+
+    expect(result.investment.uuid).toEqual(investment.uuid)
+
+    const { incomes } = result.investment
+    expect(incomes.length).toBe(1)
+    expect(incomes[0]).toEqual(income)
   })
 })

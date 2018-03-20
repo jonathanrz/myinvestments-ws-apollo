@@ -4,10 +4,12 @@ import {
   Column,
   BaseEntity,
   Generated,
-  ManyToOne
+  ManyToOne,
+  OneToMany
 } from "typeorm"
 
 import { User } from "./User"
+import { Income } from "./Income"
 
 @Entity()
 export class Investment extends BaseEntity {
@@ -19,6 +21,10 @@ export class Investment extends BaseEntity {
 
   @ManyToOne(type => User)
   user: User
+  @OneToMany(type => Income, income => income.investment, {
+    eager: true
+  })
+  incomes: Income[]
 
   @Column({ unique: true })
   name: string

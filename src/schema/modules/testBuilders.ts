@@ -65,3 +65,49 @@ export const updateInvestment = async (uuid, values, context) => {
 
   return result.updateInvestment
 }
+
+export const createIncome = async (investmentUuid, values, context) => {
+  const defaultValues = {
+    date: 1521504163,
+    quantity: 100,
+    value: 1234
+  }
+  const data = { ...defaultValues, ...values }
+  const result = await execute(
+    `
+      mutation CreateIncome($investmentUuid: String!, $data: IncomeInput!){
+        createIncome(investmentUuid: $investmentUuid, data: $data) {
+          uuid
+          date
+        }
+      }
+    `,
+    { investmentUuid, data },
+    context
+  )
+
+  return result.createIncome
+}
+
+export const updateIncome = async (uuid, values, context) => {
+  const defaultValues = {
+    date: 1521504163,
+    quantity: 100,
+    value: 1234
+  }
+  const data = { ...defaultValues, ...values }
+  const result = await execute(
+    `
+      mutation UpdateIncome($uuid: String!, $data: IncomeInput!){
+        updateIncome(uuid: $uuid, data: $data) {
+          uuid
+          date
+        }
+      }
+    `,
+    { uuid, data },
+    context
+  )
+
+  return result.updateIncome
+}
