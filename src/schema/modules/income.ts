@@ -54,7 +54,11 @@ export const resolvers = {
     }),
     income: withAuth(async (_, { uuid }, { user }) => {
       const income = await Income.findOne({ uuid, user: user.id })
-      income.investment = await Investment.findOne({ id: income.investmentId })
+      if (income) {
+        income.investment = await Investment.findOne({
+          id: income.investmentId
+        })
+      }
       return income
     })
   },
