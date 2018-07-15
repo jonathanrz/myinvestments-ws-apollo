@@ -69,11 +69,15 @@ export const resolvers = {
         investment: { ...investment },
         user: { ...user }
       })
-      return income.save()
+      income.save()
+      income.investment = investment
+      return income
     }),
-    updateIncome: withAuth((_, { uuid, data }, { user }) => {
+    updateIncome: withAuth(async (_, { uuid, data }, { user }) => {
       Income.update({ uuid, user: user.id }, { ...data })
-      return Income.findOne({ uuid, user: user.id })
+      const income = await Income.findOne({ uuid, user: user.id })
+      income.investment = await Investment.findOne({ id: income.investmentId })
+      return income
     })
   }
 }
