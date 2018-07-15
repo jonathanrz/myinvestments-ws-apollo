@@ -64,12 +64,12 @@ export const resolvers = {
         uuid: investmentUuid,
         user: user.id
       })
-      const income = Income.create({
+      let income = Income.create({
         ...data,
         investment: { ...investment },
         user: { ...user }
       })
-      income.save()
+      income = await income.save()
       income.investment = investment
       return income
     }),
