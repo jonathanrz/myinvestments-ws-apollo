@@ -13,6 +13,7 @@ export const typeDefs = `
     gross: Int
     ir: Int
     fee: Int
+    investment: Investment
   }
 
   input IncomeInput {
@@ -51,9 +52,11 @@ export const resolvers = {
         where: { investment: investment.id, user: user.id }
       })
     }),
-    income: withAuth((_, { uuid }, { user }) =>
-      Income.findOne({ uuid, user: user.id })
-    )
+    income: withAuth(async (_, { uuid }, { user }) => {
+      const income = await Income.findOne({ uuid, user: user.id })
+      income.investment = await Investment.findOne({ id: income.investmentId })
+      return income
+    })
   },
   Mutation: {
     createIncome: withAuth(async (_, { investmentUuid, data }, { user }) => {
