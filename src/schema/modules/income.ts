@@ -49,7 +49,7 @@ export const resolvers = {
         return []
       }
       return Income.find({
-        where: { investment: investment.id, user: user.id }
+        where: { investmentId: investment.id, user: user.id }
       })
     }),
     income: withAuth(async (_, { uuid }, { user }) => {
