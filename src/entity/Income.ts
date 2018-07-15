@@ -22,7 +22,8 @@ export class Income extends BaseEntity {
   user: User
   @ManyToOne(type => Investment, investment => investment.incomes)
   investment: Investment
-  @Column() investmentId: number
+  @Column({ default: 0 })
+  investmentId: number
 
   @Column() date: number
   @Column() quantity: number
