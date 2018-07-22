@@ -6,7 +6,7 @@ export const typeDefs = `
   type Income {
     uuid: String!
     date: Int!
-    quantity: Float!
+    quantity: Int!
     value: Int!
     bought: Int
     sold: Int
@@ -18,7 +18,7 @@ export const typeDefs = `
 
   input IncomeInput {
     date: Int!
-    quantity: Float!
+    quantity: Int!
     value: Int!
     bought: Int
     sold: Int
