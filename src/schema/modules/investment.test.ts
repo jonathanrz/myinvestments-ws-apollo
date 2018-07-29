@@ -1,3 +1,4 @@
+import * as moment from "moment"
 import {
   createUser,
   createInvestment,
@@ -20,6 +21,18 @@ const allInvestmentsQuery = () => `
     }
   }
 `
+
+const investmentsOfMonthQuery = () => `
+  {
+    investmentsOfMonth {
+      uuid
+      lastIncome {
+        uuid
+      }
+    }
+  }
+`
+
 const getInvestmentQuery = uuid => `
   {
     investment(uuid: "${uuid}") {
@@ -140,5 +153,31 @@ describe("investment model ", () => {
     const { incomes } = result.investment
     expect(incomes.length).toBe(1)
     expect(incomes[0]).toEqual(income)
+  })
+
+  it("should return investment of month", async () => {
+    const investment1 = await createInvestment({ name: "investment1" }, context)
+    await createIncome(
+      investment1.uuid,
+      { date: moment().format("X") },
+      context
+    )
+    const investment2 = await createInvestment({ name: "investment2" }, context)
+    const lastMonthIncome = await createIncome(
+      investment2.uuid,
+      {
+        date: moment()
+          .subtract(1, "months")
+          .format("X")
+      },
+      context
+    )
+
+    const result = await execute(investmentsOfMonthQuery(), null, context)
+
+    expect(result.investmentsOfMonth).toHaveLength(1)
+    const investment = result.investmentsOfMonth[0]
+    expect(investment.uuid).toBe(investment2.uuid)
+    expect(investment.lastIncome.uuid).toBe(lastMonthIncome.uuid)
   })
 })
