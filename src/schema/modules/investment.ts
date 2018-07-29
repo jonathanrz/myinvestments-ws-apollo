@@ -72,6 +72,7 @@ export const resolvers = {
         })
         .filter(
           investment =>
+            investment.lastIncome.value > 0 &&
             investment.lastIncome.date < firstDayOfMonth(moment()).format("X")
         )
     }),

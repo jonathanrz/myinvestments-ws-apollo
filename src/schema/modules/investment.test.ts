@@ -180,4 +180,22 @@ describe("investment model ", () => {
     expect(investment.uuid).toBe(investment2.uuid)
     expect(investment.lastIncome.uuid).toBe(lastMonthIncome.uuid)
   })
+
+  it("should not return sold investment in investment of month", async () => {
+    const investment = await createInvestment({ name: "investment1" }, context)
+    await createIncome(
+      investment.uuid,
+      {
+        date: moment()
+          .subtract(1, "months")
+          .format("X"),
+        value: 0
+      },
+      context
+    )
+
+    const result = await execute(investmentsOfMonthQuery(), null, context)
+
+    expect(result.investmentsOfMonth).toHaveLength(0)
+  })
 })
