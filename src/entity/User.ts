@@ -20,6 +20,7 @@ export class User extends BaseEntity {
   @Column() password: string
 
   @BeforeInsert()
+  @BeforeUpdate()
   async encryptPassword() {
     this.password = await bcrypt.hash(this.password, SALT_ROUNDS)
   }
