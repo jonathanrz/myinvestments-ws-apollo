@@ -2,6 +2,7 @@ import { orderBy } from "lodash"
 import * as moment from "moment"
 
 import { firstDayOfMonth } from "../../utils/date"
+import { mapLastIncome } from "../../utils/investments"
 import { Investment } from "../../entity/Investment"
 import { withAuth } from "../../authentication"
 
@@ -34,7 +35,7 @@ export const typeDefs = `
 `
 
 export const query = `
-  investments: [Investment]
+  investments(sold: Boolean): [Investment]
   investmentsOfMonth: [InvestmentOfMonth]
   investment(uuid: String!): Investment
 `
@@ -46,30 +47,21 @@ export const mutation = `
 
 export const resolvers = {
   Query: {
-    investments: withAuth((_, __, { user }) =>
-      Investment.find({ where: { user: user.id } })
-    ),
+    investments: withAuth(async (_, { sold }, { user }) => {
+      const investments = await Investment.find({ where: { user: user.id } })
+      return investments
+        .map(mapLastIncome)
+        .filter(
+          investment =>
+            sold
+              ? investment.lastIncome && investment.lastIncome.value === 0
+              : !investment.lastIncome || investment.lastIncome.value > 0
+        )
+    }),
     investmentsOfMonth: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
       return investments
-        .map(investment => {
-          if (investment.incomes) {
-            const lastIncome = orderBy(
-              investment.incomes,
-              ["date"],
-              ["desc"]
-            )[0]
-            return {
-              ...investment,
-              lastIncome
-            }
-          } else {
-            return {
-              ...investment,
-              lastIncome: {}
-            }
-          }
-        })
+        .map(mapLastIncome)
         .filter(
           investment =>
             investment.lastIncome &&
