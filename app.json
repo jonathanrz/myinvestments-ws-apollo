@@ -1,0 +1,38 @@
+{
+  "name": "myinvestments-ws-apollo",
+  "scripts": {
+  },
+  "env": {
+    "PORT": {
+      "required": true
+    },
+    "POSTGRES_DB_NAME": {
+      "required": true
+    },
+    "POSTGRES_HOST": {
+      "required": true
+    },
+    "POSTGRES_PASSWORD": {
+      "required": true
+    },
+    "POSTGRES_PORT": {
+      "required": true
+    },
+    "POSTGRES_USER": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
