@@ -15,6 +15,7 @@ export const typeDefs = `
     objective: String!
     dueDate: Int
     incomes: [Income]
+    lastIncome: Income
   }
 
   type InvestmentOfMonth {
@@ -69,9 +70,14 @@ export const resolvers = {
             investment.lastIncome.date < firstDayOfMonth(moment()).format("X")
         )
     }),
-    investment: withAuth((_, { uuid }, { user }) =>
-      Investment.findOne({ uuid, user: user.id })
-    )
+    investment: withAuth(async (_, { uuid }, { user }) => {
+      const investment = await Investment.findOne({ uuid, user: user.id })
+      if (investment) {
+        return mapLastIncome(investment)
+      } else {
+        return null
+      }
+    })
   },
   Mutation: {
     createInvestment: withAuth((_, { data }, { user }) =>
