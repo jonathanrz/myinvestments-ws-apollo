@@ -2,7 +2,7 @@ import { orderBy } from "lodash"
 import * as moment from "moment"
 
 import { firstDayOfMonth } from "../../utils/date"
-import { mapLastIncome } from "../../utils/investments"
+import { mapLastIncome, mapYield } from "../../utils/investments"
 import { Investment } from "../../entity/Investment"
 import { withAuth } from "../../authentication"
 
@@ -52,6 +52,7 @@ export const resolvers = {
       const investments = await Investment.find({ where: { user: user.id } })
       return investments
         .map(mapLastIncome)
+        .map(mapYield)
         .filter(
           investment =>
             sold

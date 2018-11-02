@@ -13,6 +13,7 @@ export const typeDefs = `
     gross: Int
     ir: Int
     fee: Int
+    yield: Int
     investment: Investment
   }
 
