@@ -17,16 +17,19 @@ export function mapLastIncome(investment) {
 
 export function mapYield(investment) {
   const incomes = orderBy(investment.incomes, ["date"], ["asc"])
-  incomes.forEach((income, index) => {
-    if (index === 0) {
-      return { ...income, yield: income.value - income.bought - income.sold }
-    }
 
-    return {
-      ...income,
-      yield:
-        income.value - income.bought - income.sold - incomes[index - 1].yield
-    }
-  })
-  return { ...investment, incomes }
+  return {
+    ...investment,
+    incomes: incomes.map((income, index) => {
+      if (index === 0) {
+        return { ...income, yield: income.value - income.bought - income.sold }
+      }
+
+      return {
+        ...income,
+        yield:
+          income.value - income.bought - income.sold - incomes[index - 1].yield
+      }
+    })
+  }
 }
