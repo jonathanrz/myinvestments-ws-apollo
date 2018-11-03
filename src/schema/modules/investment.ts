@@ -1,8 +1,11 @@
-import { orderBy } from "lodash"
 import * as moment from "moment"
 
 import { firstDayOfMonth } from "../../utils/date"
-import { mapLastIncome, mapYield } from "../../utils/investments"
+import {
+  mapLastIncome,
+  mapYield,
+  mapSoldInvestmentData
+} from "../../utils/investments"
 import { Investment } from "../../entity/Investment"
 import { withAuth } from "../../authentication"
 
@@ -16,6 +19,17 @@ export const typeDefs = `
     dueDate: Int
     incomes: [Income]
     lastIncome: Income
+  }
+
+  type SoldInvestment {
+    uuid: String!
+    name: String!
+    type: String!
+    holder: String!
+    objective: String!
+    totalBought: Int!
+    totalYield: Int!
+    totalMonth: Int!
   }
 
   type InvestmentOfMonth {
@@ -36,7 +50,9 @@ export const typeDefs = `
 `
 
 export const query = `
-  investments(sold: Boolean): [Investment]
+  investments: [Investment]
+  activeInvestments: [Investment]
+  soldInvestments: [SoldInvestment]
   investmentsOfMonth: [InvestmentOfMonth]
   investment(uuid: String!): Investment
 `
@@ -48,17 +64,30 @@ export const mutation = `
 
 export const resolvers = {
   Query: {
-    investments: withAuth(async (_, { sold }, { user }) => {
+    investments: withAuth(async (_, __, { user }) => {
+      const investments = await Investment.find({ where: { user: user.id } })
+      return investments.map(mapLastIncome).map(mapYield)
+    }),
+    activeInvestments: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
       return investments
         .map(mapLastIncome)
         .map(mapYield)
         .filter(
           investment =>
-            sold
-              ? investment.lastIncome && investment.lastIncome.value === 0
-              : !investment.lastIncome || investment.lastIncome.value > 0
+            !investment.lastIncome || investment.lastIncome.value > 0
         )
+    }),
+    soldInvestments: withAuth(async (_, __, { user }) => {
+      const investments = await Investment.find({ where: { user: user.id } })
+      return investments
+        .map(mapLastIncome)
+        .filter(
+          investment =>
+            investment.lastIncome && investment.lastIncome.value === 0
+        )
+        .map(mapYield)
+        .map(mapSoldInvestmentData)
     }),
     investmentsOfMonth: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
@@ -74,7 +103,7 @@ export const resolvers = {
     investment: withAuth(async (_, { uuid }, { user }) => {
       const investment = await Investment.findOne({ uuid, user: user.id })
       if (investment) {
-        return mapLastIncome(investment)
+        return mapYield(mapLastIncome(investment))
       } else {
         return null
       }
