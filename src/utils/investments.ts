@@ -53,13 +53,10 @@ export function mapYield(investment) {
 }
 
 export function mapSoldInvestmentData(investment) {
-  console.log({ incomes: investment.incomes })
-  const mappedInvestment = {
+  return {
     ...investment,
     totalBought: investment.incomes.reduce((acc, i) => acc + i.bought, 0),
     totalYield: investment.incomes.reduce((acc, i) => acc + i.yield, 0),
     totalMonth: investment.incomes.length
   }
-  console.log({ mappedInvestment })
-  return mappedInvestment
 }

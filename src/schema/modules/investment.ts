@@ -103,7 +103,7 @@ export const resolvers = {
     investment: withAuth(async (_, { uuid }, { user }) => {
       const investment = await Investment.findOne({ uuid, user: user.id })
       if (investment) {
-        return mapLastIncome(investment)
+        return mapYield(mapLastIncome(investment))
       } else {
         return null
       }
