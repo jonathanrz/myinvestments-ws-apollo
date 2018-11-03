@@ -17,6 +17,9 @@ export const typeDefs = `
     holder: String!
     objective: String!
     dueDate: Int
+    totalBought: Int!
+    totalYield: Int!
+    totalMonth: Int!
     incomes: [Income]
     lastIncome: Income
   }
