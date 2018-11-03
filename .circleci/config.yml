@@ -3,7 +3,7 @@ jobs:
   lint:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.9.3
+      - image: circleci/node:8.11.3
     steps:
       - checkout
       - run:
@@ -25,7 +25,7 @@ jobs:
   test:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:8.9.3
+      - image: circleci/node:8.11.3
         environment:
           POSTGRES_DB: myinvestments
           POSTGRES_USER: "user"
