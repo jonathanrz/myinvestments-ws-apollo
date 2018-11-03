@@ -52,7 +52,7 @@ export const typeDefs = `
 export const query = `
   investments: [Investment]
   activeInvestments: [Investment]
-  soldInvestments: [Investment]
+  soldInvestments: [SoldInvestment]
   investmentsOfMonth: [InvestmentOfMonth]
   investment(uuid: String!): Investment
 `
