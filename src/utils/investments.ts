@@ -56,8 +56,8 @@ export function mapSoldInvestmentData(investment) {
   console.log({ incomes: investment.incomes })
   const mappedInvestment = {
     ...investment,
-    totalBought: investment.incomes.reduce((i, acc) => acc + i.bought, 0) || 0,
-    totalYield: investment.incomes.reduce((i, acc) => acc + i.yield, 0) || 0,
+    totalBought: investment.incomes.reduce((acc, i) => acc + i.bought, 0),
+    totalYield: investment.incomes.reduce((acc, i) => acc + i.yield, 0),
     totalMonth: investment.incomes.length
   }
   console.log({ mappedInvestment })
