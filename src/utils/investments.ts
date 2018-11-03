@@ -25,14 +25,27 @@ export function mapYield(investment) {
       if (index === 0) {
         lastIncome = {
           ...income,
-          yield: income.value - income.bought + income.sold
+          yield:
+            income.value -
+            income.bought +
+            income.sold +
+            income.gross -
+            income.ir -
+            income.fee
         }
         return lastIncome
       }
 
       lastIncome = {
         ...income,
-        yield: income.value - income.bought + income.sold - lastIncome.value
+        yield:
+          income.value -
+          income.bought +
+          income.sold +
+          income.gross -
+          income.ir -
+          income.fee -
+          lastIncome.value
       }
       return lastIncome
     })
