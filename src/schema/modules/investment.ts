@@ -66,7 +66,10 @@ export const resolvers = {
   Query: {
     investments: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
-      return investments.map(mapLastIncome).map(mapYield)
+      return investments
+        .map(mapLastIncome)
+        .map(mapYield)
+        .map(mapSoldInvestmentData)
     }),
     activeInvestments: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
@@ -77,6 +80,7 @@ export const resolvers = {
           investment =>
             !investment.lastIncome || investment.lastIncome.value > 0
         )
+        .map(mapSoldInvestmentData)
     }),
     soldInvestments: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
