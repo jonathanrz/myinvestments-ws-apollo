@@ -4,7 +4,7 @@ import { firstDayOfMonth } from "../../utils/date"
 import {
   mapLastIncome,
   mapYield,
-  mapSoldInvestmentData
+  mapInvestmentResumeData
 } from "../../utils/investments"
 import { Investment } from "../../entity/Investment"
 import { withAuth } from "../../authentication"
@@ -19,6 +19,7 @@ export const typeDefs = `
     dueDate: Int
     totalBought: Int!
     totalYield: Int!
+    totalReceived: Int!
     totalMonth: Int!
     incomes: [Income]
     lastIncome: Income
@@ -32,6 +33,7 @@ export const typeDefs = `
     objective: String!
     totalBought: Int!
     totalYield: Int!
+    totalReceived: Int!
     totalMonth: Int!
   }
 
@@ -72,7 +74,7 @@ export const resolvers = {
       return investments
         .map(mapLastIncome)
         .map(mapYield)
-        .map(mapSoldInvestmentData)
+        .map(mapInvestmentResumeData)
     }),
     activeInvestments: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
@@ -83,7 +85,7 @@ export const resolvers = {
           investment =>
             !investment.lastIncome || investment.lastIncome.value > 0
         )
-        .map(mapSoldInvestmentData)
+        .map(mapInvestmentResumeData)
     }),
     soldInvestments: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
@@ -94,7 +96,7 @@ export const resolvers = {
             investment.lastIncome && investment.lastIncome.value === 0
         )
         .map(mapYield)
-        .map(mapSoldInvestmentData)
+        .map(mapInvestmentResumeData)
     }),
     investmentsOfMonth: withAuth(async (_, __, { user }) => {
       const investments = await Investment.find({ where: { user: user.id } })
