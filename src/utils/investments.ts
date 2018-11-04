@@ -22,29 +22,24 @@ export function mapYield(investment) {
   return {
     ...investment,
     incomes: incomes.map((income, index) => {
+      const received = income.gross - income.ir - income.fee
       if (index === 0) {
         lastIncome = {
           ...income,
-          yield:
-            income.value -
-            income.bought +
-            income.sold +
-            income.gross -
-            income.ir -
-            income.fee
+          received,
+          yield: income.value - income.bought + income.sold + received
         }
         return lastIncome
       }
 
       lastIncome = {
         ...income,
+        received,
         yield:
           income.value -
           income.bought +
           income.sold +
-          income.gross -
-          income.ir -
-          income.fee -
+          received -
           lastIncome.value
       }
       return lastIncome
@@ -57,7 +52,10 @@ export function mapInvestmentResumeData(investment) {
     ...investment,
     totalBought: investment.incomes.reduce((acc, i) => acc + i.bought, 0),
     totalYield: investment.incomes.reduce((acc, i) => acc + i.yield, 0),
-    totalReceived: investment.incomes.reduce((acc, i) => acc + i.gross - i.ir - i.fee, 0),
+    totalReceived: investment.incomes.reduce(
+      (acc, i) => acc + i.gross - i.ir - i.fee,
+      0
+    ),
     totalMonth: investment.incomes.length
   }
 }

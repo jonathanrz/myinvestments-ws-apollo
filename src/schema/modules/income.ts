@@ -14,6 +14,7 @@ export const typeDefs = `
     ir: Int
     fee: Int
     yield: Int
+    received: Int
     investment: Investment
   }
 
