@@ -30,6 +30,7 @@ export class Investment extends BaseEntity {
   name: string
 
   @Column() type: string
+  @Column() incomeType: string
   @Column() holder: string
   @Column() objective: string
 
