@@ -10,8 +10,7 @@
     "test": "jest",
     "start": "ts-node src/index.ts",
     "dev": "nodemon --exec ts-node src/index.ts",
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "heroku-postbuild": "typeorm migrations:run"
+    "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "dependencies": {
     "@types/cors": "^2.8.3",
