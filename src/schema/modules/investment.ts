@@ -14,6 +14,7 @@ export const typeDefs = `
     uuid: String!
     name: String!
     type: String!
+    incomeType: String
     holder: String!
     objective: String!
     dueDate: Int
@@ -29,6 +30,7 @@ export const typeDefs = `
     uuid: String!
     name: String!
     type: String!
+    incomeType: String
     holder: String!
     objective: String!
     totalBought: Int!
@@ -48,6 +50,7 @@ export const typeDefs = `
   input InvestmentInput {
     name: String!
     type: String!
+    incomeType: String
     holder: String!
     objective: String!
     dueDate: Int

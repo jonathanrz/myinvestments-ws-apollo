@@ -26,11 +26,10 @@ export class Investment extends BaseEntity {
   })
   incomes: Income[]
 
-  @Column({ unique: true })
-  name: string
-
+  @Column() name: string
   @Column() type: string
-  @Column({ nullable: true }) incomeType: string
+  @Column({ nullable: true })
+  incomeType: string
   @Column() holder: string
   @Column() objective: string
 
