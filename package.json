@@ -6,6 +6,10 @@
   "repository": "https://github.com/jonathanrz/myinvestments-ws-apollo",
   "author": "Jonathan Zanella",
   "license": "MIT",
+  "engines": {
+    "node": ">=12 <13",
+    "yarn": ">= 1.0.0"
+  },
   "scripts": {
     "test": "jest",
     "start": "ts-node src/index.ts",
