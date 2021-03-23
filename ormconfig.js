@@ -9,7 +9,7 @@ module.exports = {
   password: process.env.POSTGRES_PASSWORD || "",
   database: isTestEnv ? `${database}-test` : database,
   extra: {
-    "ssl": "true"
+    ssl: process.env.POSTGRES_SSL || "false",
   },
   dropSchema: isTestEnv,
   synchronize: true,
