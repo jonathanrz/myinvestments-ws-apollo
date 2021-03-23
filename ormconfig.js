@@ -8,9 +8,12 @@ module.exports = {
   username: process.env.POSTGRES_USER || "",
   password: process.env.POSTGRES_PASSWORD || "",
   database: isTestEnv ? `${database}-test` : database,
+  extra: {
+    "ssl": "true"
+  },
   dropSchema: isTestEnv,
   synchronize: true,
-  logging: false,
+  logging: true,
   entities: ["src/entity/**/*.ts"],
   migrations: ["src/migration/**/*.ts"],
   subscribers: ["src/subscriber/**/*.ts"],
