@@ -20,7 +20,7 @@
     "cors": "^2.8.4",
     "graphql-yoga": "^1.5.1",
     "jest": "^22.4.2",
-    "jwt-simple": "^0.5.1",
+    "jwt-simple": "^0.5.3",
     "lodash": "^4.17.5",
     "moment": "^2.22.2",
     "mysql": "^2.14.1",
