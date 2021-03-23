@@ -13,14 +13,14 @@ jobs:
           key: v2-dependencies-node_modules-{{ arch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install
-          command: yarn install
+          command: sudo yarn install
       - save_cache:
           key: v2-dependencies-node_modules-{{ arch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
       - run:
           name: run linters
-          command: yarn lint
+          command: sudo yarn lint
 
   test:
     working_directory: ~/repo
