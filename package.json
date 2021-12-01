@@ -1,6 +1,6 @@
 {
   "name": "myinvestments-ws-apollo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "server for myinvestments applications",
   "main": "src/index.js",
   "repository": "https://github.com/jonathanrz/myinvestments-ws-apollo",
