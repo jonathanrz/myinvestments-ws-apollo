@@ -30,7 +30,7 @@
     "mysql": "^2.14.1",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
-    "pg": "^7.3.0",
+    "pg": "^8.7.1",
     "reflect-metadata": "^0.1.10",
     "ts-jest": "^22.4.1",
     "ts-node": "^5.0.1",
